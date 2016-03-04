@@ -181,12 +181,12 @@ public class Bus {
 		// tu moi diem dau tim 1 duong di den diem cuoi va add vao danh sach
 		// cach di
 		for (int busNumber : arrBusNumberToStart) {
-			//dung bfs
-//			arrWayOfJourney.add(bfsForBusApp(busNumber, startPosition,
+			// dung bfs
+			 arrWayOfJourney.add(bfsForBusApp(busNumber, startPosition,
+			 endPosition));
+			// dung dfs
+//			arrWayOfJourney.add(dfsForBusApp(busNumber, startPosition,
 //					endPosition));
-			//dung dfs
-			arrWayOfJourney.add(dfsForBusApp(busNumber, startPosition,
-					endPosition));
 		}
 
 		System.out.println("Để đi từ " + start + " đến " + end + " ta có "
@@ -204,7 +204,6 @@ public class Bus {
 		String resultWay = "";
 		// khoi tao hashmap luu duong di
 		HashMap hmWay = new HashMap();
-		hmWay.put(busNumber, startPosition);
 
 		// khoi tao ma tran trang thai
 		int[] statusPosition = new int[NUMBER_POSITION];
@@ -213,6 +212,8 @@ public class Bus {
 
 		// khoi tao nowBus - xe dang di va Queue cac xe bus du dinh len
 		int nowBus = busNumber;
+		hmWay.put(nowBus, startPosition);
+		statusPosition[startPosition] = 1;
 		Queue qBus = new LinkedList<Integer>();
 
 		// bien kiem tra tim duoc diem cuoi chua
@@ -265,7 +266,8 @@ public class Bus {
 	 * Ham tim duong di bang dfs
 	 */
 	public String dfsForBusApp(int busNumber, int startPosition, int endPosition) {
-		// System.out.println("start bfs: "+busNumber+" "+startPosition+" "+endPosition);
+//		System.out.println("start dfs: " + busNumber + " " + startPosition
+//				+ " " + endPosition);
 		// khoi tao ket qua
 		String resultWay = "";
 		// khoi tao hashmap luu duong di
@@ -279,22 +281,24 @@ public class Bus {
 
 		// khoi tao nowBus - xe dang di va Queue cac xe bus du dinh len
 		int nowBus = busNumber;
+		hmWay.put(nowBus, startPosition);
+		statusPosition[startPosition] = 1;
 		Queue qBus = new LinkedList<Integer>();
-//		hmWay.put(nowBus, 0);
-		
+
 		// bien kiem tra tim duoc diem cuoi chua
 		Boolean found = false;
 
 		/*
 		 * tim duong khi nao chua di den diem cuoi thi tiep tuc tim tai moi xe
 		 * bus, kiem tra cac diem di qua va luu vao ma tran trang thai neu = 1
-		 * diem nao qua roi khong xet lai nua
-		 * neu di het xe bus dang xet ma khong tim thay diem dung nao = 1 nua thi quay lai xe trc do
-		 * */
+		 * diem nao qua roi khong xet lai nua neu di het xe bus dang xet ma
+		 * khong tim thay diem dung nao = 1 nua thi quay lai xe trc do
+		 */
 		int i;
-		while(!found){
-			for(i = 0; i < NUMBER_POSITION; i++){
-				if(way[nowBus][i] == 1 && statusPosition[i]== 0){
+		while (!found) {
+			// System.out.println("now bus: "+nowBus);
+			for (i = 0; i < NUMBER_POSITION; i++) {
+				if (way[nowBus][i] == 1 && statusPosition[i] == 0) {
 					statusPosition[i] = 1;
 					hmWay.put(nowBus, i);
 					qBus.add(i);
@@ -304,11 +308,10 @@ public class Bus {
 					break;
 				}
 			}
-			if((i== NUMBER_POSITION && found == false) || i >= NUMBER_BUS)
+			if ((i == NUMBER_POSITION && found == false) || i >= NUMBER_BUS)
 				nowBus = (int) qBus.poll();
 			else
 				nowBus = i;
-			System.out.println("nowBus = "+ nowBus );
 		}
 
 		// lay duong di ra
